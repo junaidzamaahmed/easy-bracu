@@ -10,11 +10,37 @@ import { Sidebar } from "./components/Sidebar/Sidebar";
 import { useState } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 function App() {
+  const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
+    ({ theme, open }) => ({
+      flexGrow: 1,
+      padding: theme.spacing(3),
+      transition: theme.transitions.create("margin", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      marginLeft: `-240px`,
+      ...(open && {
+        transition: theme.transitions.create("margin", {
+          easing: theme.transitions.easing.easeOut,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+        marginLeft: 0,
+      }),
+    })
+  );
+  const DrawerHeader = styled("div")(({ theme }) => ({
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-end",
+  }));
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState("dark");
 
@@ -38,26 +64,19 @@ function App() {
       <BrowserRouter>
         <Box sx={{ display: "flex" }}>
           <CssBaseline />
-          <Navbar handleDrawerToggle={handleDrawerToggle} />
+          <Navbar handleDrawerToggle={handleDrawerToggle} open={mobileOpen} />
           <Sidebar
             handleDrawerToggle={handleDrawerToggle}
-            mobileOpen={mobileOpen}
+            open={mobileOpen}
             toggleTheme={toggleTheme}
             theme={theme}
           />
-          <Box
-            component="main"
-            sx={{
-              flexGrow: 1,
-              p: 3,
-              width: { sm: `calc(100% - 240px)` },
-            }}
-          >
-            <Toolbar />
+          <Main open={mobileOpen}>
+            <DrawerHeader />
             <Routes>
               <Route path="/" element={<Home />}></Route>
             </Routes>
-          </Box>
+          </Main>
         </Box>
       </BrowserRouter>
     </ThemeProvider>
