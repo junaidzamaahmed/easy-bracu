@@ -15,6 +15,8 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import { styled, useTheme } from "@mui/material/styles";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import RateReviewIcon from "@mui/icons-material/RateReview";
+import { NavLink } from "react-router-dom";
 
 export const Sidebar = ({ handleDrawerToggle, open, toggleTheme }) => {
   const DrawerHeader = styled("div")(({ theme }) => ({
@@ -26,6 +28,7 @@ export const Sidebar = ({ handleDrawerToggle, open, toggleTheme }) => {
     justifyContent: "flex-end",
   }));
   const theme = useTheme();
+  console.log(theme);
 
   const drawerWidth = 240;
   return (
@@ -53,30 +56,21 @@ export const Sidebar = ({ handleDrawerToggle, open, toggleTheme }) => {
       </DrawerHeader>
       <Divider />
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
+        <NavLink
+          to="faculty-reviews"
+          style={{ color: "inherit", textDecoration: "none" }}
+        >
+          <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                <RateReviewIcon />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={"Faculty Reviews"} />
             </ListItemButton>
           </ListItem>
-        ))}
+        </NavLink>
       </List>
       <Divider />
-      <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
       <Box
         sx={{
           display: "flex",
@@ -86,9 +80,13 @@ export const Sidebar = ({ handleDrawerToggle, open, toggleTheme }) => {
           p: 3,
         }}
       >
-        {theme === "dark" ? "Dark" : "Light"} mode
+        {theme.palette.mode === "dark" ? "Dark" : "Light"} Mode
         <IconButton sx={{ ml: 1 }} onClick={toggleTheme} color="inherit">
-          {theme === "dark" ? <Brightness7Icon /> : <Brightness4Icon />}
+          {theme.palette.mode === "dark" ? (
+            <Brightness4Icon />
+          ) : (
+            <Brightness7Icon />
+          )}
         </IconButton>
       </Box>
     </Drawer>

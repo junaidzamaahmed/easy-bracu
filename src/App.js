@@ -16,6 +16,7 @@ import initializeAuthentication from "./Firebase/firebase.init";
 import AuthProvider from "./context/AuthProvider";
 import { useFirebase } from "./hooks/useFirebase";
 import { CircularProgress } from "@mui/material";
+import { FacultyReviews } from "./pages/FacultyReviews";
 
 initializeAuthentication();
 
@@ -90,7 +91,8 @@ function App() {
               <Main open={mobileOpen}>
                 <DrawerHeader />
                 <Routes>
-                  <Route path="/" element={<Home />}></Route>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/faculty-reviews" element={<FacultyReviews />} />
                 </Routes>
               </Main>
             </Box>

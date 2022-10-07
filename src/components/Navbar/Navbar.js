@@ -14,12 +14,11 @@ import MuiAppBar from "@mui/material/AppBar";
 import { styled } from "@mui/material/styles";
 import useAuth from "../../hooks/useAuth";
 import { Button } from "@mui/material";
+import { NavLink } from "react-router-dom";
 
 export const Navbar = ({ handleDrawerToggle, open }) => {
   const { signInWithGoogle, user, logOut } = useAuth();
   const drawerWidth = 240;
-
-  const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
   const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -60,6 +59,7 @@ export const Navbar = ({ handleDrawerToggle, open }) => {
             <MenuIcon />
           </IconButton>
           <SchoolIcon sx={{ display: "flex", mr: 1 }} />
+
           <Typography
             variant="h6"
             noWrap
@@ -76,7 +76,12 @@ export const Navbar = ({ handleDrawerToggle, open }) => {
               flex: 1,
             }}
           >
-            Easy BRACU
+            <NavLink
+              to="/"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              Easy BRACU
+            </NavLink>
           </Typography>
           <Box>
             {user?.email ? (
