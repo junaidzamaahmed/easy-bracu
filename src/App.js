@@ -12,6 +12,12 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { styled } from "@mui/material/styles";
+import initializeAuthentication from "./Firebase/firebase.init";
+import AuthProvider from "./context/AuthProvider";
+import { useFirebase } from "./hooks/useFirebase";
+import { CircularProgress } from "@mui/material";
+
+initializeAuthentication();
 
 function App() {
   const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -59,26 +65,38 @@ function App() {
       mode: theme,
     },
   });
+  const { isLoading } = useFirebase();
   return (
     <ThemeProvider theme={darkTheme}>
-      <BrowserRouter>
-        <Box sx={{ display: "flex" }}>
-          <CssBaseline />
-          <Navbar handleDrawerToggle={handleDrawerToggle} open={mobileOpen} />
-          <Sidebar
-            handleDrawerToggle={handleDrawerToggle}
-            open={mobileOpen}
-            toggleTheme={toggleTheme}
-            theme={theme}
-          />
-          <Main open={mobileOpen}>
-            <DrawerHeader />
-            <Routes>
-              <Route path="/" element={<Home />}></Route>
-            </Routes>
-          </Main>
-        </Box>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          {isLoading ? (
+            <Box sx={{ display: "flex" }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Box sx={{ display: "flex" }}>
+              <CssBaseline />
+              <Navbar
+                handleDrawerToggle={handleDrawerToggle}
+                open={mobileOpen}
+              />
+              <Sidebar
+                handleDrawerToggle={handleDrawerToggle}
+                open={mobileOpen}
+                toggleTheme={toggleTheme}
+                theme={theme}
+              />
+              <Main open={mobileOpen}>
+                <DrawerHeader />
+                <Routes>
+                  <Route path="/" element={<Home />}></Route>
+                </Routes>
+              </Main>
+            </Box>
+          )}
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

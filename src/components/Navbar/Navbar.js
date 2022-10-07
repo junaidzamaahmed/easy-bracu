@@ -12,8 +12,11 @@ import MenuItem from "@mui/material/MenuItem";
 import SchoolIcon from "@mui/icons-material/School";
 import MuiAppBar from "@mui/material/AppBar";
 import { styled } from "@mui/material/styles";
+import useAuth from "../../hooks/useAuth";
+import { Button } from "@mui/material";
 
 export const Navbar = ({ handleDrawerToggle, open }) => {
+  const { signInWithGoogle, user, logOut } = useAuth();
   const drawerWidth = 240;
 
   const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -76,40 +79,55 @@ export const Navbar = ({ handleDrawerToggle, open }) => {
             Easy BRACU
           </Typography>
           <Box>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{
-                mt: "45px",
-                ml: {
-                  xs: "calc(85%)",
-                  lg: "calc(88%)",
-                  xl: "calc(90%)",
-                },
-              }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+            {user?.email ? (
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src={user.photoURL} />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Button onClick={signInWithGoogle} variant="outlined">
+                Login
+              </Button>
+            )}
+
+            {user.email && (
+              <Menu
+                sx={{
+                  mt: "45px",
+                  ml: {
+                    xs: "calc(62%)",
+                    sm: "calc(75%)",
+                    md: "calc(80%)",
+                    lg: "calc(88%)",
+                    xl: "calc(90%)",
+                  },
+                }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {/* {settings.map((setting) => ( */}
+
+                <MenuItem onClick={handleCloseUserMenu}>
+                  <Button onClick={logOut} variant="outlined">
+                    Logout
+                  </Button>
                 </MenuItem>
-              ))}
-            </Menu>
+                {/* <Typography textAlign="center"></Typography> */}
+                {/* ))} */}
+              </Menu>
+            )}
           </Box>
         </Toolbar>
       </Container>
